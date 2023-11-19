@@ -178,14 +178,14 @@ app.get("/notes/:notebookId", async function (request, response) {
     }
   });
 //Get notes by note id
-app.get("/fullNote/:id", async function (request,response){
-    const {id}= request.params;
+app.get("/API/notes/:noteId", async function (request,response){
+    const {noteId}= request.params;
     
     const note= await client
     .db("Notes_making_app")
     .collection("notes")
     .findOne({_id:new ObjectId(id)});
-    // response.send(movie);
+   console.log("note",note);
     note?response.send(note):response.status(404).send({msg:"No notes found"});
 });
 
