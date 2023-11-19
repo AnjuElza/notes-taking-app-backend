@@ -86,7 +86,7 @@ app.post('/login', async (req, res) => {
   
       // Passwords match, user is authenticated
       // Create and sign a JWT token
-      const token = jwt.sign({ username }, '1564356', { expiresIn: '1h' });
+      const token = jwt.sign({ username }, process.env.SECRET_KEY, { expiresIn: '1h' });
   
       res.status(200).json({ message: 'Login successful.', token });
     } catch (error) {
