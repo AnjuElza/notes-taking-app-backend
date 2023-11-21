@@ -6,8 +6,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
 
 const app= express();
-// const PORT=4000;
-const PORT=process.env.PORT;
+ const PORT=4000;
+// const PORT=process.env.PORT;
 dotenv.config();
 app.use(express.json());
 app.use(cors({
@@ -62,7 +62,8 @@ app.post('/register', async (req, res) => {
       res.status(500).json({ error: 'Internal server error.' });
     }
   });
-  
+
+
 // Login endpoint
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -73,7 +74,7 @@ app.post('/login', async (req, res) => {
   
       if (!user) {
         // User not found
-        return res.json({ error: 'Invalid username or password.' });
+        return res.status(401).json({ error: 'Invalid username or password.' });
       }
   
       // Compare the provided password with the hashed password stored in the database
@@ -81,17 +82,17 @@ app.post('/login', async (req, res) => {
   
       if (!passwordMatch) {
         // Passwords do not match
-        return res.json({ error: 'Invalid username or password.' });
+        return res.status(401).json({ error: 'Invalid username or password.' });
       }
   
       // Passwords match, user is authenticated
       // Create and sign a JWT token
       const token = jwt.sign({ username }, process.env.SECRET_KEY, { expiresIn: '1h' });
   
-      res.status(200).json({ message: 'Login successful.', token });
+      res.status(200).json({ message: 'Login successful.', token, username });
     } catch (error) {
       console.error('Error during login:', error);
-      res.json({ error: 'Internal server error.' });
+      res.status(500).json({ error: 'Internal server error.' });
     }
   });
   
